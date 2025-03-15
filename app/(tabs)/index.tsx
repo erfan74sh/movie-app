@@ -27,6 +27,7 @@ export default function Index() {
 				contentContainerStyle={{
 					minHeight: "100%",
 					paddingBottom: 10,
+					paddingHorizontal: 10,
 				}}
 			>
 				<Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
@@ -46,6 +47,7 @@ export default function Index() {
 						<SearchBar
 							onPress={() => router.push("/search")}
 							placeholder="Search for a movie"
+							value=""
 						/>
 						<>
 							<Text className="text-lg text-white font-bold mt-5 mb-3">
