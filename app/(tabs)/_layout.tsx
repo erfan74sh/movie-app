@@ -1,6 +1,6 @@
 import { View, Text, ImageBackground, Image } from "react-native";
 import React from "react";
-import { Stack, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 
@@ -40,7 +40,7 @@ const _layout = () => {
 					backgroundColor: "#0f0D23",
 					borderRadius: 50,
 					marginHorizontal: 20,
-					marginBottom: 36,
+					marginBottom: 72,
 					height: 52,
 					position: "absolute",
 					overflow: "hidden",
