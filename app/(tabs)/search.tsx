@@ -1,33 +1,42 @@
-import { View, Text, Image, FlatList, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
-import { images } from "@/constants/images";
-import useFetch from "@/services/useFetch";
-import { fetchMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
-import { icons } from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
+import { icons } from "@/constants/icons";
+import { images } from "@/constants/images";
+import useDebounce from "@/hooks/useDebounce";
+import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/supabase";
+import useFetch from "@/services/useFetch";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 const Search = () => {
 	const [searchQuery, setSearchQuery] = useState("");
+	const debouncedVal = useDebounce(searchQuery);
 
 	const {
-		data: movies,
+		currentData: movies,
 		loading,
 		error,
 		refetch: loadMovies,
 		reset,
-	} = useFetch(() => fetchMovies({ query: searchQuery }), false);
+	} = useFetch(() => fetchMovies({ query: debouncedVal }), false);
 
 	useEffect(() => {
-		const timeoutId = setTimeout(async () => {
-			if (searchQuery.trim()) {
+		const fetch = async () => {
+			if (debouncedVal && debouncedVal.trim()) {
 				await loadMovies();
 			} else {
 				reset();
 			}
-		}, 500);
-		return () => clearTimeout(timeoutId);
-	}, [searchQuery]);
+		};
+		fetch();
+	}, [debouncedVal]);
+
+	useEffect(() => {
+		if (movies?.length > 0 && movies?.[0]) {
+			updateSearchCount(debouncedVal, movies[0]);
+		}
+	}, [movies]);
 
 	return (
 		<View className="flex-1 bg-primary">
